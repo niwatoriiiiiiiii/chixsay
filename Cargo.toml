@@ -2,5 +2,29 @@
 name = "chixsay"
 version = "0.1.0"
 edition = "2024"
+description = "cowsay, but for chickens."
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/niwatoriiiiiiiii/chixsay"
+readme = "README.md"
+
+categories = ["command-line-utilities"]
+keywords = ["cli", "terminal", "cowsay", "chicken", "ascii-art"]
+
+include = ["src/**/*", "Cargo.toml", "README.md", "LICENSE-*"]
+
+[[bin]]
+name = "chixsay"
+path = "src/main.rs"
 
 [dependencies]
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
+
+[lints.clippy]
+pedanic = "warn"
+nursery = "warn"
