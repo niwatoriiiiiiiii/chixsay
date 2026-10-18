@@ -27,5 +27,5 @@ panic = "abort"
 strip = true
 
 [lints.clippy]
-pedanic = "warn"
+pedantic = "warn"
 nursery = "warn"
