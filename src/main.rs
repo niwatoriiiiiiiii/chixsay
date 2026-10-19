@@ -1,11 +1,10 @@
 use std::env;
-use unicode_width::{UnicodeWidthChar, UnicodeWidthStr};
+use unicode_segmentation::UnicodeSegmentation;
+use unicode_width::UnicodeWidthStr;
 
-const CHICKEN: &str = r"
-       \
+const CHICKEN: &str = r"       \
         \    ##
-          < > ^< >
-";
+          < > ^< >";
 
 const MAX_WIDTH: usize = 40;
 
@@ -15,13 +14,12 @@ fn main() {
 }
 
 fn get_message() -> String {
-    let args: Vec<String> = env::args().collect();
-    if args.len() > 1 {
-        return args[1..].join(" ");
+    let message = env::args().skip(1).collect::<Vec<_>>().join(" ");
+    if message.is_empty() {
+        "I'm a chicken!".to_string()
+    } else {
+        message
     }
-
-    // Fallback
-    "I'm a chicken!".to_string()
 }
 
 fn print_character(text: &str) {
@@ -35,42 +33,43 @@ fn print_character(text: &str) {
     let total_lines = lines.len();
     for (i, line) in lines.iter().enumerate() {
         let padding = " ".repeat(max_line_width - line.width());
-
-        if total_lines == 1 {
-            println!(" < {line}{padding} > ");
-        } else if i == 0 {
-            println!(" / {line}{padding} \\ ");
-        } else if i == total_lines - 1 {
-            println!(" \\ {line}{padding} / ");
-        } else {
-            println!(" | {line}{padding} | ");
-        }
+        let (left, right) = match (total_lines, i) {
+            (1, _) => ('<', '>'),
+            (_, 0) => ('/', '\\'),
+            (n, i) if i == n - 1 => ('\\', '/'),
+            _ => ('|', '|'),
+        };
+        println!(" {left} {line}{padding} {right} ");
     }
 
-    print!("  {border}  ");
-    print!("{CHICKEN}");
+    println!("  {border}  ");
+    println!("{CHICKEN}");
 }
 
 fn wrap_text(text: &str, max_width: usize) -> Vec<String> {
+    // Replace tabs with spaces and remove control characters
+    let cleaned: String = text
+        .chars()
+        .map(|c| if c == '\t' { ' ' } else { c })
+        .filter(|c| !c.is_control() || *c == '\n')
+        .collect();
+
     let mut lines = Vec::new();
-    let mut current_line = String::new();
-    let mut current_width = 0;
 
-    for ch in text.chars() {
-        let ch_width = UnicodeWidthChar::width(ch).unwrap_or(0);
+    for paragraph in cleaned.trim_end_matches('\n').split('\n') {
+        let mut current = String::new();
+        let mut current_width = 0;
 
-        if current_width + ch_width > max_width && !current_line.is_empty() {
-            lines.push(current_line);
-            current_line = String::new();
-            current_width = 0;
+        for g in paragraph.graphemes(true) {
+            let w = g.width();
+            if current_width + w > max_width && !current.is_empty() {
+                lines.push(std::mem::take(&mut current));
+                current_width = 0;
+            }
+            current.push_str(g);
+            current_width += w;
         }
-
-        current_line.push(ch);
-        current_width += ch_width;
-    }
-
-    if !current_line.is_empty() {
-        lines.push(current_line);
+        lines.push(current);
     }
 
     lines
