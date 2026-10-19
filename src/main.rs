@@ -54,19 +54,19 @@ fn print_character(text: &str) {
 fn wrap_text(text: &str, max_width: usize) -> Vec<String> {
     let mut lines = Vec::new();
     let mut current_line = String::new();
-    let mut currnt_width = 0;
+    let mut current_width = 0;
 
     for ch in text.chars() {
         let ch_width = UnicodeWidthChar::width(ch).unwrap_or(0);
 
-        if currnt_width + ch_width > max_width && !current_line.is_empty() {
+        if current_width + ch_width > max_width && !current_line.is_empty() {
             lines.push(current_line);
             current_line = String::new();
-            currnt_width = 0;
+            current_width = 0;
         }
 
         current_line.push(ch);
-        currnt_width += ch_width;
+        current_width += ch_width;
     }
 
     if !current_line.is_empty() {
