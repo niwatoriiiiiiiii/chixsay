@@ -15,7 +15,7 @@ fn main() {
 fn get_message() -> String {
     let message = env::args().skip(1).collect::<Vec<_>>().join(" ");
     if message.is_empty() {
-        "I'm a chicken!".to_string()
+        "Bawk Bawk!".to_string()
     } else {
         message
     }
