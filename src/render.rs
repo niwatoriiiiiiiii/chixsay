@@ -7,9 +7,26 @@ use unicode_width::UnicodeWidthStr;
 
 const MAX_WIDTH: usize = 40;
 
-pub fn say(text: &str) {
+#[derive(Clone, Copy)]
+pub enum Expression {
+    Normal,
+    Dead,
+    Tired,
+}
+
+impl Expression {
+    const fn eyes(self) -> (&'static str, &'static str) {
+        match self {
+            Self::Normal => (">", "<"),
+            Self::Dead => ("x", "x"),
+            Self::Tired => ("-", "-"),
+        }
+    }
+}
+
+pub fn say(message: &str, expression: Expression) {
     let p = Palette::new();
-    let lines = wrap_text(text, MAX_WIDTH);
+    let lines = wrap_text(message, MAX_WIDTH);
 
     let max_line_width = lines.iter().map(|l| l.width()).max().unwrap_or(0);
     let border = paint(p.border, &"-".repeat(max_line_width + 2));
@@ -32,10 +49,12 @@ pub fn say(text: &str) {
     }
 
     println!("  {border}  ");
-    print_chicken(&p);
+    print_chicken(&p, expression);
 }
 
-fn print_chicken(p: &Palette) {
+fn print_chicken(p: &Palette, expression: Expression) {
+    let (left_eye, right_eye) = expression.eyes();
+
     println!("       {}", paint(p.border, "\\"));
     println!(
         "        {}    {}",
@@ -45,9 +64,9 @@ fn print_chicken(p: &Palette) {
     println!(
         "          {} {} {}{} {}",
         paint(p.body, "<"),
-        paint(p.eye, ">"),
+        paint(p.eye, left_eye),
         paint(p.beak, "^"),
-        paint(p.eye, "<"),
+        paint(p.eye, right_eye),
         paint(p.body, ">"),
     );
 }
