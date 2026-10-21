@@ -1,4 +1,6 @@
 <div align="center">
+  <img src="docs/demo.png" alt="Chixsay example" width="400">
+
   <h1>Chixsay</h1>
   <p>cowsay, but for chickens.</p>
 
