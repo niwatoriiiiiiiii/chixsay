@@ -1,5 +1,16 @@
 use super::palette::{Palette, paint};
 
+static FLAGS: &[(Expression, &str, &str)] = &[
+    (Expression::Crying, "-c", "--crying"),
+    (Expression::Dead, "-d", "--dead"),
+    (Expression::Greedy, "-g", "--greedy"),
+    (Expression::Meh, "-m", "--meh"),
+    (Expression::Paranoid, "-p", "--paranoid"),
+    (Expression::Stoned, "-s", "--stoned"),
+    (Expression::Tired, "-t", "--tired"),
+    (Expression::Wired, "-w", "--wired"),
+];
+
 #[derive(Clone, Copy)]
 pub enum Expression {
     Normal,
@@ -14,19 +25,20 @@ pub enum Expression {
 }
 
 impl Expression {
-    pub fn from_frag(flag: &str) -> Option<Self> {
-        match flag {
-            "-c" | "--crying" => Some(Self::Crying),
-            "-d" | "--dead" => Some(Self::Dead),
-            "-g" | "--greedy" => Some(Self::Greedy),
-            "-m" | "--meh" => Some(Self::Meh),
-            "-p" | "--paranoid" => Some(Self::Paranoid),
-            "-s" | "--stoned" => Some(Self::Stoned),
-            "-t" | "--tired" => Some(Self::Tired),
-            "-w" | "--wired" => Some(Self::Wired),
-            _ => None,
-        }
+    pub fn from_flag(flag: &str) -> Option<Self> {
+        FLAGS
+            .iter()
+            .find(|(_, short, long)| flag == *short || flag == *long)
+            .map(|&(e, _, _)| e)
     }
+
+    pub fn options() -> impl Iterator<Item = (&'static str, &'static str, String)> {
+        FLAGS.iter().map(|&(e, short, long)| {
+            let (left, right) = e.eyes();
+            (short, long, format!("{left} ^{right}"))
+        })
+    }
+
     const fn eyes(self) -> (&'static str, &'static str) {
         match self {
             Self::Normal => (">", "<"),

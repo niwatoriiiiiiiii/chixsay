@@ -13,10 +13,13 @@ pub(super) struct Palette {
     pub(super) beak: &'static str,
 }
 
+pub fn color_enabled() -> bool {
+    io::stdout().is_terminal() && env::var_os("NO_COLOR").is_none()
+}
+
 impl Palette {
     pub(super) fn new() -> Self {
-        let use_color = io::stdout().is_terminal() && env::var_os("NO_COLOR").is_none();
-        if use_color {
+        if color_enabled() {
             Self {
                 border: "\x1b[93m",
                 text: "\x1b[37m",
@@ -38,7 +41,7 @@ impl Palette {
     }
 }
 
-pub(super) fn paint(code: &str, s: &str) -> String {
+pub fn paint(code: &str, s: &str) -> String {
     if code.is_empty() {
         s.to_string()
     } else {
