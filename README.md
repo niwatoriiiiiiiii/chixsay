@@ -10,8 +10,8 @@
   <br>
   <img src="https://github.com/niwatoriiiiiiiii/chixsay/actions/workflows/ci.yml/badge.svg" alt="CI" />
   <img src="https://img.shields.io/badge/rustc-1.85.1%2B-lightgrey" alt="Rust Version" />
-  <img src="https://img.shields.io/badge/modularity-28_loc%2Ffile-brightgreen" alt="Modularity" />
-  <img src="https://img.shields.io/badge/docs-0.6%25-blue" alt="Docs" />
+  <img src="https://img.shields.io/badge/modularity-32_loc%2Ffile-brightgreen" alt="Modularity" />
+  <img src="https://img.shields.io/badge/docs-0.5%25-blue" alt="Docs" />
 </div>
 
 ---

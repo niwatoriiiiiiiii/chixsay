@@ -18,10 +18,9 @@ fn parse_args() -> Config {
     let mut expression = Expression::Normal;
 
     for arg in env::args().skip(1) {
-        match arg.as_str() {
-            "-d" => expression = Expression::Dead,
-            "-t" => expression = Expression::Tired,
-            other => message_parts.push(other.to_string()),
+        match Expression::from_frag(&arg) {
+            Some(e) => expression = e,
+            None => message_parts.push(arg),
         }
     }
 
