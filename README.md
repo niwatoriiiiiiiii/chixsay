@@ -35,8 +35,8 @@ Requires Rust 1.85.1 or leter.
 ## Usage
 
 ```sh
-chixsay "Hello, world!"
-chixsay --tired "I need a nap"
+chixsay 'Hello, world!'
+chixsay --tired 'I need a nap'
 ```
 
 ## Options
