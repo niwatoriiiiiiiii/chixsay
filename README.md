@@ -16,15 +16,58 @@
 
 ---
 
+## Installation
+
+```sh
+cargo install chixsay
+```
+
+Or build from source:
+
+```sh
+git clone https://github.com/niwatoriiiiiiiii/chixsay
+cd chixsay
+cargo build --release
+```
+
+Requires Rust 1.85.1 or leter.
+
+## Usage
+
+```sh
+chixsay "Hello, world!"
+chixsay --tired "I need a nap"
+```
+
+## Options
+
+| Option | Expression |
+|---|---|
+| `-c`, `--crying` | `T ^T` |
+| `-d`, `--dead` | `x ^x` |
+| `-g`, `--greedy` | `$ ^$` |
+| `-m`, `--meh` | `U ^U` |
+| `-p`, `--paranoid` | `@ ^@` |
+| `-s`, `--stoned` | `* ^*` |
+| `-t`, `--tired` | `- ^-` |
+| `-w`, `--wired` | `O ^O` |
+| `-h`, `--help` | Show help |
+
+Colors are disabled when the output is piped or `NO_COLOR` is set.
+
+## Acknowledgements
+
+Inspired by [cowsay](https://github.com/cowsay-org/cowsay).
+
 ## License
 
-This project is dual-licensed under eigher of:
+This project is dual-licensed under either of:
 
-- Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE) or <http://www.apache.org/licenses/LICENSE-2.0>)
-- MIT License ([LICENSE-MIT](LICENSE-MIT) or <http://opensource.org/licenses/MIT>)
+- Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE) or <https://www.apache.org/licenses/LICENSE-2.0>)
+- MIT License ([LICENSE-MIT](LICENSE-MIT) or <https://opensource.org/licenses/MIT>)
 
 at your option.
 
 ### Contribution
 
-Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in the work by you, ad defined in the Apache-2.0 license, shall be dual licensed ad above, without any additional terms or conditions.
+Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in the work by you, as defined in the Apache-2.0 license, shall be dual licensed ad above, without any additional terms or conditions.
