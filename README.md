@@ -5,6 +5,11 @@
   <a href="LICENSE">
     <img src="https://img.shields.io/badge/license-MIT%20%2F%20Apache--2.0-blue?style=flat-square" alt="License: MIT / Apache-2.0"/>
   </a>
+  <img src="https://img.shields.io/badge/version-v0.2.0-orange?style=flat-square" alt="Version" />
+  <img src="https://img.shields.io/crates/d/chixsay.svg?style=flat-square" alt="Downloads">
+  <img src="https://img.shields.io/badge/rustc-1.85.1%2B-lightgrey?style=flat-square" alt="Rust Version" />
+  <img src="https://img.shields.io/badge/modularity-28_loc%2Ffile-brightgreen?style=flat-square" alt="Modularity" />
+  <img src="https://img.shields.io/badge/docs-0.6%25-blue?style=flat-square" alt="Docs" />
 </div>
 
 ---
