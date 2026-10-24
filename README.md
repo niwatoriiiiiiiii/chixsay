@@ -12,8 +12,8 @@
   <br>
   <img src="https://github.com/niwatoriiiiiiiii/chixsay/actions/workflows/ci.yml/badge.svg" alt="CI" />
   <img src="https://img.shields.io/badge/rustc-1.85.1%2B-lightgrey" alt="Rust Version" />
-  <img src="https://img.shields.io/badge/modularity-41_loc%2Ffile-brightgreen" alt="Modularity" />
-  <img src="https://img.shields.io/badge/docs-0.4%25-blue" alt="Docs" />
+  <img src="https://img.shields.io/badge/modularity-56_loc%2Ffile-brightgreen" alt="Modularity" />
+  <img src="https://img.shields.io/badge/docs-0.3%25-blue" alt="Docs" />
 </div>
 
 ---

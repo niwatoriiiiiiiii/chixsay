@@ -13,8 +13,16 @@ pub(super) struct Palette {
     pub(super) beak: &'static str,
 }
 
+fn colors_allowed() -> bool {
+    env::var_os("NO_COLOR").is_none()
+}
+
 pub fn color_enabled() -> bool {
-    io::stdout().is_terminal() && env::var_os("NO_COLOR").is_none()
+    io::stdout().is_terminal() && colors_allowed()
+}
+
+pub fn stderr_color_enabled() -> bool {
+    io::stderr().is_terminal() && colors_allowed()
 }
 
 impl Palette {

@@ -11,7 +11,7 @@ static FLAGS: &[(Expression, &str, &str)] = &[
     (Expression::Wired, "-w", "--wired"),
 ];
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq, Eq)]
 pub enum Expression {
     Normal,
     Crying,

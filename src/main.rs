@@ -1,4 +1,4 @@
-use render::{Expression, color_enabled, paint};
+use render::{Expression, color_enabled, paint, stderr_color_enabled};
 use std::{
     env,
     io::{self, IsTerminal, Read},
@@ -9,6 +9,10 @@ mod render;
 
 const HEAD: &str = "\x1b[1;92m";
 const LIT: &str = "\x1b[1;96m";
+const ERR: &str = "\x1b[1;91m";
+const INVALID: &str = "\x1b[1;93m";
+
+const USAGE: &str = "chixsay [OPTIONS] [MESSAGE]...";
 
 fn main() {
     let args = parse_args();
@@ -22,18 +26,32 @@ struct Config {
 
 fn parse_args() -> Config {
     let mut message_parts = Vec::new();
-    let mut expression = Expression::Normal;
+    let mut expression: Option<(Expression, String)> = None;
+    let mut args = env::args().skip(1);
 
-    for arg in env::args().skip(1) {
+    while let Some(arg) = args.next() {
+        if arg == "--" {
+            message_parts.extend(args.by_ref());
+            break;
+        }
         if matches!(arg.as_str(), "-h" | "--help") {
             print_help();
             process::exit(0);
         }
-        match Expression::from_flag(&arg) {
-            Some(e) => expression = e,
-            None => message_parts.push(arg),
+        if let Some(e) = Expression::from_flag(&arg) {
+            if let Some((prev, prev_arg)) = &expression {
+                conflicting_expression(prev_arg, &arg, *prev == e);
+            }
+            expression = Some((e, arg));
+            continue;
         }
+        if looks_like_option(&arg) {
+            unexpected_argument(&arg);
+        }
+        message_parts.push(arg);
     }
+
+    let expression = expression.map_or(Expression::Normal, |(e, _)| e);
 
     let message = if message_parts.is_empty() {
         read_stdin().unwrap_or_else(|| "Bawk Bawk!".to_string())
@@ -45,6 +63,81 @@ fn parse_args() -> Config {
         message,
         expression,
     }
+}
+
+fn looks_like_option(arg: &str) -> bool {
+    arg.len() > 1 && arg.starts_with('-') && !arg.contains(char::is_whitespace)
+}
+
+struct Styles {
+    head: &'static str,
+    lit: &'static str,
+    err: &'static str,
+    invalid: &'static str,
+}
+
+impl Styles {
+    fn stderr() -> Self {
+        if stderr_color_enabled() {
+            Self {
+                head: HEAD,
+                lit: LIT,
+                err: ERR,
+                invalid: INVALID,
+            }
+        } else {
+            Self {
+                head: "",
+                lit: "",
+                err: "",
+                invalid: "",
+            }
+        }
+    }
+}
+
+fn unexpected_argument(arg: &str) -> ! {
+    let s = Styles::stderr();
+    let tip = format!(
+        "to pass '{}' as a value, use '{}'",
+        paint(s.invalid, arg),
+        paint(s.lit, &format!("chixsay -- {arg}"))
+    );
+    fail(
+        &s,
+        &format!("unexpected argument '{}' found", paint(s.invalid, arg)),
+        Some(tip),
+    )
+}
+
+fn conflicting_expression(prev: &str, arg: &str, same: bool) -> ! {
+    let s = Styles::stderr();
+    let message = if same {
+        format!(
+            "the argument '{}' cannot be used multiple times",
+            paint(s.invalid, arg)
+        )
+    } else {
+        format!(
+            "the argument '{}' cannot be used with '{}'",
+            paint(s.invalid, arg),
+            paint(s.invalid, prev)
+        )
+    };
+    fail(&s, &message, None)
+}
+
+fn fail(s: &Styles, message: &str, tip: Option<String>) -> ! {
+    eprintln!("{} {message}", paint(s.err, "error:"));
+    if let Some(tip) = tip {
+        eprintln!();
+        eprintln!("  {} {tip}", paint(s.lit, "tip:"));
+    }
+    eprintln!();
+    eprintln!("{} {}", paint(s.head, "Usage:"), paint(s.lit, USAGE));
+    eprintln!();
+    eprintln!("For more information, try '{}'.", paint(s.lit, "--help"));
+    process::exit(2);
 }
 
 fn read_stdin() -> Option<String> {
@@ -72,12 +165,13 @@ fn print_help() {
     println!("chixsay - cowsay, but for chickens.");
     println!();
     println!("{}", paint(head, "Usage:"));
-    println!("  {}", paint(lit, "chixsay [OPTIONS] [MESSAGE]..."));
+    println!("  {}", paint(lit, USAGE));
     println!("  If no MESSAGE is given, it is read from stdin when piped.");
     println!();
     println!("{}", paint(head, "Options:"));
 
     print_option(lit, "-h, --help", "Show this help");
+    print_option(lit, "--", "Treat the rest as the message");
     for (short, long, face) in Expression::options() {
         print_option(lit, &format!("{short}, {long}"), &face);
     }
