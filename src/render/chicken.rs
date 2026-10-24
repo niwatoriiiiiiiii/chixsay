@@ -1,6 +1,7 @@
 use super::palette::{Palette, paint};
 
 static FLAGS: &[(Expression, &str, &str)] = &[
+    (Expression::Borg, "-b", "--borg"),
     (Expression::Crying, "-c", "--crying"),
     (Expression::Dead, "-d", "--dead"),
     (Expression::Greedy, "-g", "--greedy"),
@@ -9,11 +10,13 @@ static FLAGS: &[(Expression, &str, &str)] = &[
     (Expression::Stoned, "-s", "--stoned"),
     (Expression::Tired, "-t", "--tired"),
     (Expression::Wired, "-w", "--wired"),
+    (Expression::Youthful, "-y", "--youthful"),
 ];
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum Expression {
     Normal,
+    Borg,
     Crying,
     Dead,
     Greedy,
@@ -22,6 +25,7 @@ pub enum Expression {
     Stoned,
     Tired,
     Wired,
+    Youthful,
 }
 
 impl Expression {
@@ -42,6 +46,7 @@ impl Expression {
     const fn eyes(self) -> (&'static str, &'static str) {
         match self {
             Self::Normal => (">", "<"),
+            Self::Borg => ("=", "="),
             Self::Crying => ("T", "T"),
             Self::Dead => ("x", "x"),
             Self::Greedy => ("$", "$"),
@@ -50,6 +55,7 @@ impl Expression {
             Self::Stoned => ("*", "*"),
             Self::Tired => ("-", "-"),
             Self::Wired => ("O", "O"),
+            Self::Youthful => (".", "."),
         }
     }
 }
