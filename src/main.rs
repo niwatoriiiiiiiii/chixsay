@@ -38,6 +38,10 @@ fn parse_args() -> Config {
             print_help();
             process::exit(0);
         }
+        if matches!(arg.as_str(), "-V" | "--version") {
+            println!("chixsay {}", env!("CARGO_PKG_VERSION"));
+            process::exit(0);
+        }
         if let Some(e) = Expression::from_flag(&arg) {
             if let Some((prev, prev_arg)) = &expression {
                 conflicting_expression(prev_arg, &arg, *prev == e);
@@ -171,6 +175,7 @@ fn print_help() {
     println!("{}", paint(head, "Options:"));
 
     print_option(lit, "-h, --help", "Show this help");
+    print_option(lit, "-V, --version", "Show version");
     print_option(lit, "--", "Treat the rest as the message");
     for (short, long, face) in Expression::options() {
         print_option(lit, &format!("{short}, {long}"), &face);
