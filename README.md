@@ -39,6 +39,8 @@ Requires Rust 1.85.1 or leter.
 ```sh
 chixsay 'Hello, world!'
 chixsay --tired 'I need a nap'
+chixsay 'hello!' | chixsay | chixsay
+chixsay -- '-text-'
 echo 'hello' | chixsay
 ```
 
