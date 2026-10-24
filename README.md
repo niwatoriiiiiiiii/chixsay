@@ -12,7 +12,7 @@
   <br>
   <img src="https://github.com/niwatoriiiiiiiii/chixsay/actions/workflows/ci.yml/badge.svg" alt="CI" />
   <img src="https://img.shields.io/badge/rustc-1.85.1%2B-lightgrey" alt="Rust Version" />
-  <img src="https://img.shields.io/badge/modularity-38_loc%2Ffile-brightgreen" alt="Modularity" />
+  <img src="https://img.shields.io/badge/modularity-41_loc%2Ffile-brightgreen" alt="Modularity" />
   <img src="https://img.shields.io/badge/docs-0.4%25-blue" alt="Docs" />
 </div>
 
@@ -39,21 +39,22 @@ Requires Rust 1.85.1 or leter.
 ```sh
 chixsay 'Hello, world!'
 chixsay --tired 'I need a nap'
+echo 'hello' | chixsay
 ```
 
 ## Options
 
-| Option | Expression |
-|---|---|
-| `-c`, `--crying` | `T ^T` |
-| `-d`, `--dead` | `x ^x` |
-| `-g`, `--greedy` | `$ ^$` |
-| `-m`, `--meh` | `U ^U` |
-| `-p`, `--paranoid` | `@ ^@` |
-| `-s`, `--stoned` | `* ^*` |
-| `-t`, `--tired` | `- ^-` |
-| `-w`, `--wired` | `O ^O` |
-| `-h`, `--help` | Show help |
+| Option             | Expression |
+| ------------------ | ---------- |
+| `-c`, `--crying`   | `T ^T`     |
+| `-d`, `--dead`     | `x ^x`     |
+| `-g`, `--greedy`   | `$ ^$`     |
+| `-m`, `--meh`      | `U ^U`     |
+| `-p`, `--paranoid` | `@ ^@`     |
+| `-s`, `--stoned`   | `* ^*`     |
+| `-t`, `--tired`    | `- ^-`     |
+| `-w`, `--wired`    | `O ^O`     |
+| `-h`, `--help`     | Show help  |
 
 Colors are disabled when the output is piped or `NO_COLOR` is set.
 
