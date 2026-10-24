@@ -4,19 +4,17 @@ use super::speech::Speech;
 use super::text::wrap_text;
 use unicode_width::UnicodeWidthStr;
 
-const MAX_WIDTH: usize = 40;
-
-pub fn say(message: &str, expression: Expression, speech: Speech) {
+pub fn say(message: &str, expression: Expression, speech: Speech, width: usize) {
     let p = Palette::new();
 
     if speech != Speech::Quiet {
-        print_bubble(&p, message, speech);
+        print_bubble(&p, message, speech, width);
     }
     chicken::print(&p, expression, speech);
 }
 
-pub fn print_bubble(p: &Palette, message: &str, speech: Speech) {
-    let lines = wrap_text(message, MAX_WIDTH);
+pub fn print_bubble(p: &Palette, message: &str, speech: Speech, width: usize) {
+    let lines = wrap_text(message, width);
 
     let max_line_width = lines.iter().map(|l| l.width()).max().unwrap_or(0);
     let border = paint(p.border, &"-".repeat(max_line_width + 2));

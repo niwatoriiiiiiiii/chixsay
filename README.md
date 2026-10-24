@@ -12,7 +12,7 @@
   <br>
   <img src="https://github.com/niwatoriiiiiiiii/chixsay/actions/workflows/ci.yml/badge.svg" alt="CI" />
   <img src="https://img.shields.io/badge/rustc-1.85.1%2B-lightgrey" alt="Rust Version" />
-  <img src="https://img.shields.io/badge/modularity-50_loc%2Ffile-brightgreen" alt="Modularity" />
+  <img src="https://img.shields.io/badge/modularity-60_loc%2Ffile-brightgreen" alt="Modularity" />
   <img src="https://img.shields.io/badge/docs-0.2%25-blue" alt="Docs" />
 </div>
 
@@ -46,22 +46,24 @@ echo 'hello' | chixsay
 
 ## Options
 
-| Option             | Expression             |
-| ------------------ | ---------------------- |
-| `-b`, `--borg`     | `= ^=`                 |
-| `-c`, `--crying`   | `T ^T`                 |
-| `-d`, `--dead`     | `x ^x`                 |
-| `-g`, `--greedy`   | `$ ^$`                 |
-| `-m`, `--meh`      | `U ^U`                 |
-| `-p`, `--paranoid` | `@ ^@`                 |
-| `-s`, `--stoned`   | `* ^*`                 |
-| `-t`, `--tired`    | `- ^-`                 |
-| `-w`, `--wired`    | `O ^O`                 |
-| `-y`, `--youthful` | `. ^.`                 |
-| `-q`, `--quiet`    | Hide the speech bubble |
-| `--think`          | Use a thought bubble   |
-| `-V`, `--version`  | Show version           |
-| `-h`, `--help`     | Show help              |
+| Option              | Expression              |
+| ------------------- | ----------------------- |
+| `-b`, `--borg`      | `= ^=`                  |
+| `-c`, `--crying`    | `T ^T`                  |
+| `-d`, `--dead`      | `x ^x`                  |
+| `-g`, `--greedy`    | `$ ^$`                  |
+| `-m`, `--meh`       | `U ^U`                  |
+| `-p`, `--paranoid`  | `@ ^@`                  |
+| `-s`, `--stoned`    | `* ^*`                  |
+| `-t`, `--tired`     | `- ^-`                  |
+| `-w`, `--wired`     | `O ^O`                  |
+| `-y`, `--youthful`  | `. ^.`                  |
+| `-q`, `--quiet`     | Hide the speech bubble  |
+| `-W`, `--width <N>` | Wrap at N columns       |
+| `-n`, `--no-wrap`   | Do not wrap the message |
+| `--think`           | Use a thought bubble    |
+| `-V`, `--version`   | Show version            |
+| `-h`, `--help`      | Show help               |
 
 Colors are disabled when the output is piped or `NO_COLOR` is set.
 
