@@ -1,4 +1,4 @@
-use render::{Expression, color_enabled, paint, stderr_color_enabled};
+use render::{Expression, Speech, color_enabled, paint, stderr_color_enabled};
 use std::{
     env,
     io::{self, IsTerminal, Read},
@@ -16,17 +16,19 @@ const USAGE: &str = "chixsay [OPTIONS] [MESSAGE]...";
 
 fn main() {
     let args = parse_args();
-    render::say(&args.message, args.expression);
+    render::say(&args.message, args.expression, args.speech);
 }
 
 struct Config {
     message: String,
     expression: Expression,
+    speech: Speech,
 }
 
 fn parse_args() -> Config {
     let mut message_parts = Vec::new();
     let mut expression: Option<(Expression, String)> = None;
+    let mut speech: Option<(Speech, String)> = None;
     let mut args = env::args().skip(1);
 
     while let Some(arg) = args.next() {
@@ -43,10 +45,11 @@ fn parse_args() -> Config {
             process::exit(0);
         }
         if let Some(e) = Expression::from_flag(&arg) {
-            if let Some((prev, prev_arg)) = &expression {
-                conflicting_expression(prev_arg, &arg, *prev == e);
-            }
-            expression = Some((e, arg));
+            set_once(&mut expression, e, arg);
+            continue;
+        }
+        if let Some(s) = Speech::from_flag(&arg) {
+            set_once(&mut speech, s, arg);
             continue;
         }
         if looks_like_option(&arg) {
@@ -56,8 +59,11 @@ fn parse_args() -> Config {
     }
 
     let expression = expression.map_or(Expression::Normal, |(e, _)| e);
+    let speech = speech.map_or(Speech::Say, |(s, _)| s);
 
-    let message = if message_parts.is_empty() {
+    let message = if speech == Speech::Quiet {
+        String::new()
+    } else if message_parts.is_empty() {
         read_stdin().unwrap_or_else(|| "Bawk Bawk!".to_string())
     } else {
         message_parts.join(" ")
@@ -66,7 +72,15 @@ fn parse_args() -> Config {
     Config {
         message,
         expression,
+        speech,
     }
+}
+
+fn set_once<T: PartialEq>(slot: &mut Option<(T, String)>, value: T, arg: String) {
+    if let Some((prev, prev_arg)) = slot.as_ref() {
+        conflicting_option(prev_arg, &arg, *prev == value);
+    }
+    *slot = Some((value, arg));
 }
 
 fn looks_like_option(arg: &str) -> bool {
@@ -114,7 +128,7 @@ fn unexpected_argument(arg: &str) -> ! {
     )
 }
 
-fn conflicting_expression(prev: &str, arg: &str, same: bool) -> ! {
+fn conflicting_option(prev: &str, arg: &str, same: bool) -> ! {
     let s = Styles::stderr();
     let message = if same {
         format!(
@@ -176,6 +190,8 @@ fn print_help() {
 
     print_option(lit, "-h, --help", "Show this help");
     print_option(lit, "-V, --version", "Show version");
+    print_option(lit, "-q, --quiet", "Hide the speech bubble");
+    print_option(lit, "--think", "Use a thought bubble");
     print_option(lit, "--", "Treat the rest as the message");
     for (short, long, face) in Expression::options() {
         print_option(lit, &format!("{short}, {long}"), &face);

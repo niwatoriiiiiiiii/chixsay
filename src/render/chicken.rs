@@ -1,4 +1,5 @@
 use super::palette::{Palette, paint};
+use super::speech::Speech;
 
 static FLAGS: &[(Expression, &str, &str)] = &[
     (Expression::Borg, "-b", "--borg"),
@@ -60,13 +61,17 @@ impl Expression {
     }
 }
 
-pub(super) fn print(p: &Palette, expression: Expression) {
+pub(super) fn print(p: &Palette, expression: Expression, speech: Speech) {
     let (left_eye, right_eye) = expression.eyes();
+    let tail = speech.tail();
 
-    println!("       {}", paint(p.border, "\\"));
+    if speech != Speech::Quiet {
+        println!("       {}", paint(p.border, tail));
+    }
+
     println!(
         "        {}    {}",
-        paint(p.border, "\\"),
+        paint(p.border, tail),
         paint(p.comb, "##")
     );
     println!(
