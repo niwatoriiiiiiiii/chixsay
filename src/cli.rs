@@ -296,6 +296,8 @@ fn print_help() {
         &format!("Wrap at N columns (default: {DEFAULT_WIDTH})"),
     );
     print_option(lit, "-n, --no-wrap", "Do not wrap the message");
+    print_option(lit, "-e, --eye <CHARS>", "Set custom eye characters");
+    print_option(lit, "-B, --beak <CHARS>", "Set custom beak characters");
     print_option(lit, "--think", "Use a thought bubble");
     print_option(lit, "--", "Treat the rest as the message");
     for (short, long, face) in Expression::options() {
