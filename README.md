@@ -7,7 +7,7 @@
   <a href="LICENSE">
     <img src="https://img.shields.io/badge/license-MIT%20%2F%20Apache--2.0-blue" alt="License: MIT / Apache-2.0"/>
   </a>
-  <img src="https://img.shields.io/badge/version-v0.3.0-orange" alt="Version" />
+  <img src="https://img.shields.io/badge/version-v0.4.0-orange" alt="Version" />
   <img src="https://img.shields.io/crates/d/chixsay.svg" alt="Downloads">
   <br>
   <img src="https://github.com/niwatoriiiiiiiii/chixsay/actions/workflows/ci.yml/badge.svg" alt="CI" />
