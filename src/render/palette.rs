@@ -1,7 +1,5 @@
-use std::{
-    env,
-    io::{self, IsTerminal},
-};
+use std::env;
+use std::io::{self, IsTerminal};
 
 #[derive(Default)]
 pub(super) struct Palette {

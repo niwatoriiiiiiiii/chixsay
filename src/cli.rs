@@ -1,9 +1,7 @@
 use crate::render::{Expression, Face, Speech, color_enabled, paint, stderr_color_enabled};
-use std::{
-    env,
-    io::{self, IsTerminal, Read},
-    process,
-};
+use std::env;
+use std::io::{self, IsTerminal, Read};
+use std::process;
 
 const HEAD: &str = "\x1b[1;92m";
 const LIT: &str = "\x1b[1;96m";

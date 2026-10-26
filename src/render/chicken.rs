@@ -1,5 +1,3 @@
-use unicode_segmentation::UnicodeSegmentation;
-
 use super::palette::{Palette, paint};
 use super::speech::Speech;
 
@@ -76,6 +74,8 @@ impl Face {
         custom_eye: Option<&str>,
         custom_beak: Option<&str>,
     ) -> Self {
+        use unicode_segmentation::UnicodeSegmentation;
+
         let (default_left, default_right) = expression.eyes();
         let mut left_eye = default_left.to_string();
         let mut right_eye = default_right.to_string();
@@ -101,6 +101,12 @@ impl Face {
             right_eye,
             beak,
         }
+    }
+}
+
+impl Default for Face {
+    fn default() -> Self {
+        Self::new(Expression::Normal, None, None)
     }
 }
 
