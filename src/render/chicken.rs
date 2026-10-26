@@ -1,3 +1,5 @@
+use unicode_segmentation::UnicodeSegmentation;
+
 use super::palette::{Palette, paint};
 use super::speech::Speech;
 
@@ -61,8 +63,48 @@ impl Expression {
     }
 }
 
-pub(super) fn print(p: &Palette, expression: Expression, speech: Speech) {
-    let (left_eye, right_eye) = expression.eyes();
+#[derive(Clone, Debug)]
+pub struct Face {
+    pub left_eye: String,
+    pub right_eye: String,
+    pub beak: String,
+}
+
+impl Face {
+    pub fn new(
+        expression: Expression,
+        custom_eye: Option<&str>,
+        custom_beak: Option<&str>,
+    ) -> Self {
+        let (default_left, default_right) = expression.eyes();
+        let mut left_eye = default_left.to_string();
+        let mut right_eye = default_right.to_string();
+        let mut beak = " ^".to_string();
+
+        if let Some(eye_str) = custom_eye {
+            let chars: Vec<&str> = eye_str.graphemes(true).collect();
+            if chars.len() == 1 {
+                left_eye = chars[0].to_string();
+                right_eye = chars[0].to_string();
+            } else if chars.len() >= 2 {
+                left_eye = chars[0].to_string();
+                right_eye = chars[1].to_string();
+            }
+        }
+
+        if let Some(beak_str) = custom_beak {
+            beak = beak_str.to_string();
+        }
+
+        Self {
+            left_eye,
+            right_eye,
+            beak,
+        }
+    }
+}
+
+pub(super) fn print(p: &Palette, face: &Face, speech: Speech) {
     let tail = speech.tail();
 
     if speech != Speech::Quiet {
@@ -75,11 +117,11 @@ pub(super) fn print(p: &Palette, expression: Expression, speech: Speech) {
         paint(p.comb, "##")
     );
     println!(
-        "          {} {} {}{} {}",
+        "          {} {}{}{} {}",
         paint(p.body, "<"),
-        paint(p.eye, left_eye),
-        paint(p.beak, "^"),
-        paint(p.eye, right_eye),
+        paint(p.eye, &face.left_eye),
+        paint(p.beak, &face.beak),
+        paint(p.eye, &face.right_eye),
         paint(p.body, ">"),
     );
 }

@@ -1,4 +1,4 @@
-use crate::render::{Expression, Speech, color_enabled, paint, stderr_color_enabled};
+use crate::render::{Expression, Face, Speech, color_enabled, paint, stderr_color_enabled};
 use std::{
     env,
     io::{self, IsTerminal, Read},
@@ -16,7 +16,7 @@ const DEFAULT_WIDTH: usize = 40;
 
 pub struct Config {
     pub message: String,
-    pub expression: Expression,
+    pub face: Face,
     pub speech: Speech,
     pub width: usize,
 }
@@ -37,6 +37,18 @@ const WIDTH: Opt = Opt {
     short: "-W",
     long: "--width",
     value: "N",
+};
+
+const EYE: Opt = Opt {
+    short: "-e",
+    long: "--eye",
+    value: "CHARS",
+};
+
+const BEAK: Opt = Opt {
+    short: "-B",
+    long: "--beak",
+    value: "CHARS",
 };
 
 impl Opt {
@@ -81,6 +93,8 @@ fn parse_width(flag: &str, value: &str) -> usize {
 pub fn parse() -> Config {
     let mut message_parts = Vec::new();
     let mut expression: Option<(Expression, String)> = None;
+    let mut custom_eye: Option<(String, String)> = None;
+    let mut custom_beak: Option<(String, String)> = None;
     let mut speech: Option<(Speech, String)> = None;
     let mut wrap: Option<(Wrap, String)> = None;
     let mut args = env::args().skip(1);
@@ -112,6 +126,16 @@ pub fn parse() -> Config {
             set_once(&mut wrap, Wrap::At(width), flag);
             continue;
         }
+        if let Some(value) = EYE.value(&arg, &mut args) {
+            let flag = arg.split('=').next().unwrap_or(&arg).to_string();
+            set_once(&mut custom_eye, value, flag);
+            continue;
+        }
+        if let Some(value) = BEAK.value(&arg, &mut args) {
+            let flag = arg.split('=').next().unwrap_or(&arg).to_string();
+            set_once(&mut custom_beak, value, flag);
+            continue;
+        }
         if matches!(arg.as_str(), "-n" | "--no-wrap") {
             set_once(&mut wrap, Wrap::Off, arg);
             continue;
@@ -123,6 +147,11 @@ pub fn parse() -> Config {
     }
 
     let expression = expression.map_or(Expression::Normal, |(e, _)| e);
+    let face = Face::new(
+        expression,
+        custom_eye.as_ref().map(|(v, _)| v.as_str()),
+        custom_beak.as_ref().map(|(v, _)| v.as_str()),
+    );
     let speech = speech.map_or(Speech::Say, |(s, _)| s);
     let width = match wrap {
         Some((Wrap::At(n), _)) => n,
@@ -140,7 +169,7 @@ pub fn parse() -> Config {
 
     Config {
         message,
-        expression,
+        face,
         speech,
         width,
     }

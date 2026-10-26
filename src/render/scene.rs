@@ -1,16 +1,16 @@
-use super::chicken::{self, Expression};
+use super::chicken::{self, Face};
 use super::palette::{Palette, paint};
 use super::speech::Speech;
 use super::text::wrap_text;
 use unicode_width::UnicodeWidthStr;
 
-pub fn say(message: &str, expression: Expression, speech: Speech, width: usize) {
+pub fn say(message: &str, face: &Face, speech: Speech, width: usize) {
     let p = Palette::new();
 
     if speech != Speech::Quiet {
         print_bubble(&p, message, speech, width);
     }
-    chicken::print(&p, expression, speech);
+    chicken::print(&p, face, speech);
 }
 
 pub fn print_bubble(p: &Palette, message: &str, speech: Speech, width: usize) {
