@@ -308,6 +308,6 @@ fn print_help() {
 }
 
 fn print_option(lit: &str, flags: &str, desc: &str) {
-    let pad = " ".repeat(16usize.saturating_sub(flags.len()));
+    let pad = " ".repeat(20usize.saturating_sub(flags.len()));
     println!("  {}{pad}{desc}", paint(lit, flags));
 }
